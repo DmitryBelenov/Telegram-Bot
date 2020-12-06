@@ -58,7 +58,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
             }
         } catch (TelegramApiException t) {
-            log.error("Failed to send reply." + t);
+            log.error("Send reply error." + t);
         }
     }
 }

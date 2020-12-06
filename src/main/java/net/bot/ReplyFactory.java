@@ -1,5 +1,6 @@
 package net.bot;
 
+import net.bot.scenario.AccountSc;
 import net.bot.scenario.Scenario;
 import net.bot.scenario.SuppDialogSc;
 import org.apache.log4j.Logger;
@@ -31,6 +32,7 @@ public class ReplyFactory {
         __info(false, "О НАС", null),
         __tariff(false, "ТАРИФЫ", null),
         __supp(true, "ОПЕРАТОР", SuppDialogSc.class),
+        __account(true, "ЛИЧНЫЙ КАБИНЕТ", AccountSc.class),
 
         __docs(false, "ДОКУМЕНТЫ", null),
         __contract(false, "ДОГОВОР", null),
@@ -71,6 +73,8 @@ public class ReplyFactory {
         public Scenario getScenario() {
             if (scClass == SuppDialogSc.class) {
                 return new SuppDialogSc();
+            } else if (scClass == AccountSc.class) {
+                return new AccountSc();
             }
             return null;
         }
@@ -103,7 +107,7 @@ public class ReplyFactory {
     }
 
     private static List<Object> reply(final Long chatId, final String income) {
-        List<Object> reply;
+        List<Object> reply = Collections.emptyList();
         Command inCmd = null;
 
         // income is btn callback
@@ -126,8 +130,12 @@ public class ReplyFactory {
             Command cmd = Command.valueOf(income);
             if (cmd.isHasScenario()) {
                 Scenario sc = cmd.getScenario();
-                StepByStepUserScenarios.scMap.put(chatId, sc);
-                reply = sc.init(chatId);
+                if (sc != null) {
+                    StepByStepUserScenarios.scMap.put(chatId, sc);
+                    reply = sc.init(chatId);
+                } else {
+                    log.error("Scenario for cmd " + cmd.name() + " not found");
+                }
             } else {
                 reply = getNoScenarioBtnResponse(chatId, cmd);
             }
@@ -171,7 +179,8 @@ public class ReplyFactory {
             menu.setText(SysDataHolder.botProps.getProperty(cmd.name() + ".txt"));
             menu.setReplyMarkup(KeyboardGenerator.fill(2,
                     Command.__info, Command.__tariff,
-                    Command.__supp, Command.__docs));
+                    Command.__supp, Command.__docs,
+                    Command.__account));
             return Collections.singletonList(menu);
         }  else if (cmd == Command.__docs) {
             return Collections.singletonList(getDocMenuButtons(chatId));
