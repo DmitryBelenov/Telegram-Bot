@@ -48,7 +48,7 @@ public class SuppDialogSc implements Scenario {
                     if (phoneMatcher.matches()) {
                         step++;
                         stepReply.setText(SysDataHolder.botProps.getProperty(propPrefix + step) + " \uD83D\uDE0A");
-                        stepReply.setReplyMarkup(KeyboardGenerator.fill(1, ReplyFactory.Command.__menu));
+                        stepReply.setReplyMarkup(KeyboardGenerator.fillInLine(1, ReplyFactory.Command.__menu));
 
                         StepByStepUserScenarios.scMap.remove(chatId);
                     } else

@@ -10,7 +10,7 @@ import java.util.List;
 public class KeyboardGenerator {
     private static final int btnInLineLimit = 5;
 
-    public static synchronized ReplyKeyboard fill(int btnInLine, ReplyFactory.Command... btn) {
+    public static synchronized ReplyKeyboard fillInLine(int btnInLine, ReplyFactory.Command... btn) {
         if (btnInLine == 0 || btn == null || btn.length < btnInLine)
             return null;
 
@@ -24,7 +24,8 @@ public class KeyboardGenerator {
             keyboardButtonsRow.add(new InlineKeyboardButton()
                     .setText(b.getRuName())
                     .setCallbackData(b.name()));
-            i ++; j ++;
+            i++;
+            j++;
             if (i == btnInLine || i == btnInLineLimit || j == btn.length) {
                 rowList.add(keyboardButtonsRow);
                 keyboardButtonsRow = new ArrayList<>();

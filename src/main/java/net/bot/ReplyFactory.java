@@ -108,6 +108,11 @@ public class ReplyFactory {
 
     private static List<Object> reply(final Long chatId, final String income) {
         List<Object> reply = Collections.emptyList();
+
+        if (income.equals("/start")) {
+            // start
+        }
+
         Command inCmd = null;
 
         // income is btn callback
@@ -144,6 +149,7 @@ public class ReplyFactory {
         } else {
             reply = aiResponse(chatId, income);
         }
+
         return reply;
     }
 
@@ -156,7 +162,7 @@ public class ReplyFactory {
             response = "Привет!";
         }
         aiResp.setText(response);
-        aiResp.setReplyMarkup(KeyboardGenerator.fill(1, Command.__menu));
+        aiResp.setReplyMarkup(KeyboardGenerator.fillInLine(1, Command.__menu));
         return Collections.singletonList(aiResp);
     }
 
@@ -166,7 +172,7 @@ public class ReplyFactory {
             SendMessage info = new SendMessage();
             info.setChatId(chatId);
             info.setText(SysDataHolder.botProps.getProperty(cmd.name() + ".txt"));
-            info.setReplyMarkup(KeyboardGenerator.fill(1, Command.__menu));
+            info.setReplyMarkup(KeyboardGenerator.fillInLine(1, Command.__menu));
             return Collections.singletonList(info);
 
         }  else if (cmd == Command.__menu) {
@@ -177,7 +183,7 @@ public class ReplyFactory {
             SendMessage menu = new SendMessage();
             menu.setChatId(chatId);
             menu.setText(SysDataHolder.botProps.getProperty(cmd.name() + ".txt"));
-            menu.setReplyMarkup(KeyboardGenerator.fill(2,
+            menu.setReplyMarkup(KeyboardGenerator.fillInLine(2,
                     Command.__info, Command.__tariff,
                     Command.__supp, Command.__docs,
                     Command.__account));
@@ -212,7 +218,7 @@ public class ReplyFactory {
         SendMessage menu = new SendMessage();
         menu.setChatId(chatId);
         menu.setText(SysDataHolder.botProps.getProperty(Command.__docs.name() + ".txt"));
-        menu.setReplyMarkup(KeyboardGenerator.fill(2,
+        menu.setReplyMarkup(KeyboardGenerator.fillInLine(2,
                 Command.__contract, Command.__requisites,
                 Command.__license, Command.__partners,
                 Command.__menu));
@@ -233,7 +239,7 @@ public class ReplyFactory {
                 license.setDocument(f);
                 i++;
             }
-            license.setReplyMarkup(KeyboardGenerator.fill(1, Command.__docs));
+            license.setReplyMarkup(KeyboardGenerator.fillInLine(1, Command.__docs));
 
             if(loadMsg != null) licRespList.add(loadMsg);
             licRespList.add(license);

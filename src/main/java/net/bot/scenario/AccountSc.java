@@ -34,7 +34,7 @@ public class AccountSc implements Scenario {
         SendMessage menu = new SendMessage();
         menu.setChatId(chatId);
         menu.setText("Личный кабинет временно не доступен");
-        menu.setReplyMarkup(KeyboardGenerator.fill(2,
+        menu.setReplyMarkup(KeyboardGenerator.fillInLine(2,
                 ReplyFactory.Command.__info, ReplyFactory.Command.__tariff,
                 ReplyFactory.Command.__supp, ReplyFactory.Command.__docs,
                 ReplyFactory.Command.__account));
