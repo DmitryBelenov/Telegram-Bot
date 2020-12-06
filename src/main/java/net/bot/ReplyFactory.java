@@ -105,6 +105,8 @@ public class ReplyFactory {
     private static List<Object> reply(final Long chatId, final String income) {
         List<Object> reply;
         Command inCmd = null;
+
+        // income is btn callback
         if (income.startsWith("__")) {
             try {
                 inCmd = Command.valueOf(income);
@@ -112,10 +114,14 @@ public class ReplyFactory {
                 log.warn("User sent wrong command: '" + income + "'");
             }
         }
+
+        // user in scenario loop
         if (StepByStepUserScenarios.scMap.keySet().contains(chatId)
                 && Command.__menu != inCmd) {
             Scenario sc = StepByStepUserScenarios.scMap.get(chatId);
             reply = sc.getReplyType(chatId, income);
+
+        // user push the btn
         } else if (inCmd != null && cmds.contains(inCmd)) {
             Command cmd = Command.valueOf(income);
             if (cmd.isHasScenario()) {
@@ -125,6 +131,8 @@ public class ReplyFactory {
             } else {
                 reply = getNoScenarioBtnResponse(chatId, cmd);
             }
+
+        // user send free text to bot
         } else {
             reply = aiResponse(chatId, income);
         }
