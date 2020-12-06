@@ -3,11 +3,14 @@ package net.bot;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
     private static Logger log = Logger.getLogger(Bot.class);
@@ -36,19 +39,23 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void handleMsg(final Message msg) {
-        Object o = ReplyFactory.getReply(msg);
+        List<Object> o = ReplyFactory.reply(msg);
         send(o);
     }
 
     private void handleCbQuery(final CallbackQuery cbq) {
-        Object o = ReplyFactory.getReply(cbq);
+        List<Object> o = ReplyFactory.reply(cbq);
         send(o);
     }
 
-    private void send(Object r) {
+    private void send(List<Object> respList) {
         try {
-            if (r instanceof SendMessage) {
-                execute((SendMessage) r);
+            for (Object r : respList) {
+                if (r instanceof SendMessage) {
+                    execute((SendMessage) r);
+                } else if (r instanceof SendDocument) {
+                    execute((SendDocument) r);
+                }
             }
         } catch (TelegramApiException t) {
             log.error("Failed to send reply." + t);

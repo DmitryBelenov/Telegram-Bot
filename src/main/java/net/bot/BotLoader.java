@@ -7,11 +7,15 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import javax.swing.*;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BotLoader {
     private static Logger log = Logger.getLogger(BotLoader.class);
+    private static final String[] sysPaths = new String[]{ SysDataHolder.licensePath,
+                    SysDataHolder.requisitesPath,
+                    SysDataHolder.contractPath};
 
     public BotLoader() {
     }
@@ -20,7 +24,7 @@ public class BotLoader {
         if (!BotProperties.initialize()) {
             LoggerFormat.error("Properties loading", "FAULT");
             logLoadFault();
-            label.setText(" Put properties to " + BotProperties.propertyPath);
+            label.setText(" Put properties to " + SysDataHolder.propertyPath);
             button.setText("Properties Error");
             button.setEnabled(false);
             return;
@@ -42,6 +46,18 @@ public class BotLoader {
             return;
         }
         LoggerFormat.info("Bot registration", "OK");
+
+        for (final String p : sysPaths) {
+            File path = new File(p);
+            if (!path.exists()) {
+                boolean create = path.mkdirs();
+                if (!create)
+                    LoggerFormat.info("Unable to create path " + p, "ERROR");
+                else
+                    LoggerFormat.info("Create " + p + "", "OK");
+            } else
+                LoggerFormat.info("Check " + p + "", "OK");
+        }
 
         logLoadOK();
 

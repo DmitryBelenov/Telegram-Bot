@@ -3,7 +3,7 @@ package net.bot;
 import org.apache.log4j.Logger;
 
 public class LoggerFormat {
-    private static Logger log = Logger.getLogger(LoggerFormat.class);
+    private static Logger log = Logger.getLogger(BotLoader.class);
     private static int cLen;
 
     static void info(final String infoText, final String state) {
@@ -21,7 +21,7 @@ public class LoggerFormat {
     private static String getFormatted(final String text, final String state) {
         StringBuilder infoLine = new StringBuilder();
         if (cLen == 0) {
-            final String noState = text + " ............................... ";
+            final String noState = text + " ..................................... ";
             cLen = noState.length();
             infoLine.append(noState).append(state);
         } else {
